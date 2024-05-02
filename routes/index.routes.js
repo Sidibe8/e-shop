@@ -9,7 +9,8 @@ const categoryController = require('../controllers/category.controller');
 const upload = require('../config/multer.config');
 const verifyToken = require('../middlewares/verifyToken');
 
-// Routes pour les utilisateurs
+// Route pour récupérer tous les utilisateurs
+router.get('/users', userController.getAllUsers);
 router.post('/users/register', userController.registerUser);
 router.post('/users/login', userController.loginUser);
 router.get('/users/:id', userController.getUserById);

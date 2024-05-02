@@ -2,34 +2,52 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User.models');
 
+
+// Récupérer tous les utilisateurs
+exports.getAllUsers = async (req, res) => {
+    try {
+        // Récupérer tous les utilisateurs enregistrés
+        const users = await User.find();
+        res.status(200).json(users);
+    } catch (error) {
+        res.status(500).json({ message: 'Erreur lors de la récupération des utilisateurs', error: error.message });
+    }
+};
+
+
 // Créer un nouvel utilisateur
 exports.registerUser = async (req, res) => {
     try {
-        const { firstName, lastName, phoneNumber, address, password } = req.body;
+        const { nom, email, numero, addresse, password } = req.body;
+
+        console.log(req.body);
         // Vérifier si l'utilisateur existe déjà
-        const existingUser = await User.findOne({ phoneNumber });
+        const existingUser = await User.findOne({ numero });
         if (existingUser) {
             return res.status(400).json({ message: 'Cet numero est déjà utilisé.' });
         }
         // Hasher le mot de passe
-        const hashedPassword = await bcrypt.hash(password, 10);
+        const saltRounds = 10; // Nombre de tours pour le hachage
+        const hashedPassword = await bcrypt.hash(password, saltRounds);
         // Créer un nouvel utilisateur avec le mot de passe hashé
-        const newUser = await User.create({ firstName, lastName, phoneNumber, address, password: hashedPassword });
+        const newUser = await User.create({ nom, email, numero, addresse, password: hashedPassword });
+        console.log(newUser);
         res.status(201).json({ message: 'Utilisateur créé avec succès', data: newUser });
     } catch (error) {
         res.status(400).json({ message: 'Erreur lors de la création de l\'utilisateur', error: error.message });
     }
 };
-
 // Connecter un utilisateur
 exports.loginUser = async (req, res) => {
     try {
-        const { phoneNumber, password } = req.body;
+        const { numero, password } = req.body;
         // Vérifier si l'utilisateur existe
-        const user = await User.findOne({ phoneNumber });
+        const user = await User.findOne({ numero });
         if (!user) {
             return res.status(404).json({ message: 'Numero ou mot de passe incorrect.' });
         }
+
+        console.log(user);
         // Vérifier si le mot de passe est correct
         const isPasswordValid = await bcrypt.compare(password, user.password);
         if (!isPasswordValid) {
@@ -65,14 +83,14 @@ exports.getUserById = async (req, res) => {
 exports.updateUser = async (req, res) => {
     try {
         const userId = req.params.id;
-        const { firstName, lastName, address, password } = req.body;
+        const { nom, email, addresse, password } = req.body;
         // Hasher le nouveau mot de passe si fourni
         let hashedPassword;
         if (password) {
             hashedPassword = await bcrypt.hash(password, 10);
         }
         // Mettre à jour l'utilisateur avec les nouvelles données
-        const updatedUser = await User.findByIdAndUpdate(userId, { firstName, lastName, address, password: hashedPassword }, { new: true });
+        const updatedUser = await User.findByIdAndUpdate(userId, { nom, email, addresse, password: hashedPassword }, { new: true });
         if (updatedUser) {
             res.status(200).json({ message: 'Utilisateur mis à jour avec succès', data: updatedUser });
         } else {

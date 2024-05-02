@@ -2,19 +2,19 @@ const mongoose = require('mongoose');
 
 // Schéma du modèle User
 const userSchema = new mongoose.Schema({
-    firstName: {
+    nom: {
         type: String,
         required: true
     },
-    lastName: {
+    email: {
         type: String,
         required: true
     },
-    phoneNumber: {
+    numero: {
         type: Number,
         required: true
     },
-    address: {
+    addresse: {
         type: String,
         required: true
     },
@@ -38,7 +38,11 @@ const userSchema = new mongoose.Schema({
     likedProducts: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Product'
-    }]
+    }],
+    isAdmin: {
+        type: Boolean,
+        default: false
+    }
 });
 
 // Modèle User basé sur le schéma

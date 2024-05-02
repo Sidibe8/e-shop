@@ -1,8 +1,12 @@
 const User = require('../models/User.models');
 
+const { ObjectId } = require('mongoose').Types;
+
 exports.addToCart = async (req, res) => {
     try {
-        const { userId, productId, quantity } = req.body;
+        const { userId, productId } = req.body;
+
+        console.log('productId', productId);
 
         // Vérifier si l'utilisateur existe
         const user = await User.findById(userId);
@@ -10,15 +14,18 @@ exports.addToCart = async (req, res) => {
             return res.status(404).json({ message: "Utilisateur non trouvé." });
         }
 
-        // Vérifier si le produit existe déjà dans le panier de l'utilisateur
-        const existingProductIndex = user.cart.findIndex(item => item.productId === productId);
+        // Convertir productId en ObjectId si ce n'est pas déjà le cas
+        const productObjectId = typeof productId === 'string' ? new ObjectId(productId) : productId;
 
-        if (existingProductIndex !== -1) {
+        // Vérifier si le produit existe déjà dans le panier de l'utilisateur
+        const existingProduct = user.cart.find(item => item.productId.equals(productObjectId));
+
+        if (existingProduct) {
             // Le produit existe déjà, incrémenter la quantité
-            user.cart[existingProductIndex].quantity += quantity;
+            existingProduct.quantity += 1; // Incrémentation de la quantité
         } else {
-            // Si le produit n'existe pas encore dans le panier, l'ajouter
-            user.cart.push({ productId, quantity });
+            // Si le produit n'existe pas encore dans le panier, l'ajouter avec une quantité de 1
+            user.cart.push({ productId: productObjectId, quantity: 1 });
         }
 
         // Enregistrer les modifications dans la base de données
@@ -30,6 +37,8 @@ exports.addToCart = async (req, res) => {
         res.status(500).json({ message: "Une erreur s'est produite lors de l'ajout du produit au panier." });
     }
 };
+
+
 
 
 
