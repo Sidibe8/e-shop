@@ -1,0 +1,11 @@
+# Exported from Render on 2024-05-03T12:57:02Z
+services:
+- type: web
+  name: e-shop
+  runtime: node
+  repo: https://github.com/Sidibe8/e-shop
+  plan: free
+  region: oregon
+  buildCommand: npm install
+  startCommand: node index.js
+version: "1"
