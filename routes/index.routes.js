@@ -22,7 +22,7 @@ router.get('/products', productController.getAllProducts);
 router.post('/products', upload.single('image'), productController.createProduct);
 router.get('/products/:id', productController.getProductById);
 router.put('/products/:id', productController.updateProduct);
-router.delete('/product', productController.deleteProduct);
+router.delete('/products', productController.deleteProduct);
 
 // Routes pour le panier
 router.post('/cart/add', verifyToken, cartController.addToCart);
