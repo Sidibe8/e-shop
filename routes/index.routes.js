@@ -22,7 +22,7 @@ router.get('/products', productController.getAllProducts);
 router.post('/products', upload.single('image'), productController.createProduct);
 router.get('/products/:id', productController.getProductById);
 router.put('/products/:id', productController.updateProduct);
-router.delete('/products/:id', productController.deleteProduct);
+router.delete('/product', productController.deleteProduct);
 
 // Routes pour le panier
 router.post('/cart/add', verifyToken, cartController.addToCart);
@@ -34,6 +34,6 @@ router.get('/categories', categoryController.getAllCategories);
 router.post('/categories', categoryController.createCategory);
 router.get('/categories/:id', categoryController.getCategoryById);
 // router.put('/categories/:id', categoryController.updateCategory);
-// router.delete('/categories/:id', categoryController.deleteCategory);
+router.delete('/categories', categoryController.deleteCategory);
 
 module.exports = router;

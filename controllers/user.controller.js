@@ -65,6 +65,7 @@ exports.loginUser = async (req, res) => {
 exports.getUserById = async (req, res) => {
     try {
         const userId = req.params.id;
+        console.log(userId)
         // Récupérer l'utilisateur avec le panier et les produits aimés peuplés
         const user = await User.findById(userId)
             .populate('cart.productId')

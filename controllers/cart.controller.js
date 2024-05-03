@@ -39,11 +39,6 @@ exports.addToCart = async (req, res) => {
 };
 
 
-
-
-
-
-
 // Retirer un produit du panier d'un utilisateur
 exports.removeFromCart = async (req, res) => {
     try {

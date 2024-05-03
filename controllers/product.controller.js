@@ -62,7 +62,7 @@ exports.updateProduct = async (req, res) => {
 // Contrôleur pour supprimer un produit
 exports.deleteProduct = async (req, res) => {
     try {
-        const productId = req.params.id;
+        const productId = req.body.productId;
         const deletedProduct = await Product.findByIdAndDelete(productId);
         if (!deletedProduct) {
             return res.status(404).json({ success: false, message: 'Product not found' });
@@ -72,3 +72,4 @@ exports.deleteProduct = async (req, res) => {
         res.status(500).json({ success: false, message: 'Failed to delete product', error: error.message });
     }
 };
+
