@@ -42,6 +42,8 @@ router.get('/categories/:id', categoryController.getCategoryById);
 router.delete('/categories', categoryController.deleteCategory);
 
 // / Route pour passer une commande
+// Routes pour les commandes
+router.get('/orders', orderController.getAllOrders);
 router.post('/orders', verifyToken, orderController.createOrder);
 router.get('/orders/user/:id', verifyToken, orderController.getOrdersByUserId);
 

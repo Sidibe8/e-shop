@@ -24,7 +24,8 @@ exports.createOrder = async (req, res) => {
 // Obtenir toutes les commandes
 exports.getAllOrders = async (req, res) => {
     try {
-        const orders = await Order.find();
+        const orders = await Order.find().populate('products.productId')
+            .populate('userId');
         res.status(200).json(orders);
     } catch (error) {
         console.error("Erreur lors de la récupération des commandes :", error);
@@ -39,7 +40,7 @@ exports.getOrdersByUserId = async (req, res) => {
 
         // Récupérer toutes les commandes associées à l'ID utilisateur spécifié
         const orders = await Order.find({ userId }).populate('products.productId')
-            .populate('userId');;
+            .populate('userId');
 
         // Vérifier si des commandes ont été trouvées
         if (orders.length > 0) {
