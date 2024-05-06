@@ -39,10 +39,38 @@ exports.addToCart = async (req, res) => {
 };
 
 
+
+
+// Effacer le panier d'un utilisateur
+exports.clearUserCart = async (req, res) => {
+    try {
+        const { userId } = req.body; // Récupérer userId du corps de la requête
+
+        // Vérifier si l'utilisateur existe
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ message: "Utilisateur non trouvé." });
+        }
+
+        // Vider le panier de l'utilisateur
+        user.cart = [];
+
+        // Enregistrer les modifications dans la base de données
+        await user.save();
+
+        res.status(200).json({ message: "Panier de l'utilisateur vidé avec succès.", user: user });
+    } catch (error) {
+        console.error("Erreur lors de la suppression du panier de l'utilisateur :", error);
+        res.status(500).json({ message: "Une erreur s'est produite lors de la suppression du panier de l'utilisateur." });
+    }
+};
+
+
+
 // Retirer un produit du panier d'un utilisateur
 exports.removeFromCart = async (req, res) => {
     try {
-        const { userId, productId } = req.params;
+        const { userId, productId } = req.body; // Utilisation de req.body pour récupérer les données
 
         // Vérifier si l'utilisateur existe
         const user = await User.findById(userId);
@@ -63,26 +91,3 @@ exports.removeFromCart = async (req, res) => {
     }
 };
 
-// Vider le panier d'un utilisateur
-exports.clearCart = async (req, res) => {
-    try {
-        const userId = req.params.userId;
-
-        // Vérifier si l'utilisateur existe
-        const user = await User.findById(userId);
-        if (!user) {
-            return res.status(404).json({ message: "Utilisateur non trouvé." });
-        }
-
-        // Vider le panier de l'utilisateur
-        user.cart = [];
-
-        // Enregistrer les modifications dans la base de données
-        await user.save();
-
-        res.status(200).json({ message: "Panier vidé avec succès.", user: user });
-    } catch (error) {
-        console.error("Erreur lors de la suppression du panier de l'utilisateur :", error);
-        res.status(500).json({ message: "Une erreur s'est produite lors de la suppression du panier de l'utilisateur." });
-    }
-};

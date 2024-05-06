@@ -32,8 +32,6 @@ const userSchema = new mongoose.Schema({
             type: Number,
             default: 1
         },
-        size: String, // Ajout de la taille
-        color: String // Ajout de la couleur
     }],
     likedProducts: [{
         type: mongoose.Schema.Types.ObjectId,

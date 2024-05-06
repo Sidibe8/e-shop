@@ -6,6 +6,7 @@ const userController = require('../controllers/user.controller');
 const productController = require('../controllers/product.controller');
 const cartController = require('../controllers/cart.controller');
 const categoryController = require('../controllers/category.controller');
+const orderController = require('../controllers/order.controller');
 const upload = require('../config/multer.config');
 const verifyToken = require('../middlewares/verifyToken');
 
@@ -26,8 +27,12 @@ router.delete('/products', productController.deleteProduct);
 
 // Routes pour le panier
 router.post('/cart/add', verifyToken, cartController.addToCart);
-router.delete('/cart/:userId/:productId', cartController.removeFromCart);
-router.delete('/cart/clear/:userId', cartController.clearCart);
+// Routes pour le panier
+router.delete('/cart/remove', cartController.removeFromCart);
+// Route pour effacer le panier d'un utilisateur
+// Modifier la route pour effacer le panier d'un utilisateur
+router.delete('/cart/clear', cartController.clearUserCart);
+
 
 // Routes pour les catégories
 router.get('/categories', categoryController.getAllCategories);
@@ -35,5 +40,9 @@ router.post('/categories', categoryController.createCategory);
 router.get('/categories/:id', categoryController.getCategoryById);
 // router.put('/categories/:id', categoryController.updateCategory);
 router.delete('/categories', categoryController.deleteCategory);
+
+// / Route pour passer une commande
+router.post('/orders', verifyToken, orderController.createOrder);
+router.get('/orders/user/:id', verifyToken, orderController.getOrdersByUserId);
 
 module.exports = router;
