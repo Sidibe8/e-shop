@@ -20,7 +20,7 @@ exports.registerUser = async (req, res) => {
     try {
         const { nom, email, numero, addresse, password } = req.body;
 
-        console.log(req.body);
+        // console.log(req.body);
         // Vérifier si l'utilisateur existe déjà
         const existingUser = await User.findOne({ numero });
         if (existingUser) {
@@ -31,7 +31,7 @@ exports.registerUser = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, saltRounds);
         // Créer un nouvel utilisateur avec le mot de passe hashé
         const newUser = await User.create({ nom, email, numero, addresse, password: hashedPassword });
-        console.log(newUser);
+        // console.log(newUser);
         res.status(201).json({ message: 'Utilisateur créé avec succès', data: newUser });
     } catch (error) {
         res.status(400).json({ message: 'Erreur lors de la création de l\'utilisateur', error: error.message });
@@ -47,7 +47,7 @@ exports.loginUser = async (req, res) => {
             return res.status(404).json({ message: 'Numero ou mot de passe incorrect.' });
         }
 
-        console.log(user);
+        // console.log(user);
         // Vérifier si le mot de passe est correct
         const isPasswordValid = await bcrypt.compare(password, user.password);
         if (!isPasswordValid) {
@@ -65,7 +65,7 @@ exports.loginUser = async (req, res) => {
 exports.getUserById = async (req, res) => {
     try {
         const userId = req.params.id;
-        console.log(userId)
+        // console.log(userId)
         // Récupérer l'utilisateur avec le panier et les produits aimés peuplés
         const user = await User.findById(userId)
             .populate('cart.productId')

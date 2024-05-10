@@ -28,10 +28,10 @@ router.delete('/products', productController.deleteProduct);
 // Routes pour le panier
 router.post('/cart/add', verifyToken, cartController.addToCart);
 // Routes pour le panier
-router.delete('/cart/remove', cartController.removeFromCart);
+router.delete('/cart/remove', verifyToken, cartController.removeFromCart);
 // Route pour effacer le panier d'un utilisateur
 // Modifier la route pour effacer le panier d'un utilisateur
-router.delete('/cart/clear', cartController.clearUserCart);
+router.delete('/cart/clear', verifyToken, cartController.clearUserCart);
 
 
 // Routes pour les catégories
